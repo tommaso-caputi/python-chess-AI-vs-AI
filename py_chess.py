@@ -6,19 +6,21 @@ import pygame
 import pyautogui
 import time
 
+GREEN = (118,150,86)
+WHITE = (220, 220, 220)
+WINDOW_HEIGHT = 400
+WINDOW_WIDTH = 400
+SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+CLOCK = pygame.time.Clock()
+
 pygame.init()
-surface = pygame.display.set_mode((400, 400))
+surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption('Chess')
+pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 
 def main():
-    GREEN = (118,150,86)
-    WHITE = (200, 200, 200)
-    WINDOW_HEIGHT = 400
-    WINDOW_WIDTH = 400
     global SCREEN, CLOCK
     pygame.init()
-    SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    CLOCK = pygame.time.Clock()
-    SCREEN.fill(GREEN)
 
     engine = chess.engine.SimpleEngine.popen_uci(r"D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
     board = chess.Board()
@@ -67,8 +69,8 @@ def main():
                     else:
                         img = 'images/Chess_'+str(pieces[i])+'lt60.png'
                     auto=pygame.image.load(img)
-                    auto=pygame.transform.scale(auto,(50, 50))
-                    SCREEN.blit(auto, (x,y))
+                    #auto=pygame.transform.scale(auto,(50, 50))
+                    SCREEN.blit(auto, (x-5,y-5))
                 i+=1
         
 
@@ -82,11 +84,11 @@ def main():
 
     print(str(board.outcome()))
     if board.outcome().winner!=None:
-        winner = "White win" if not board.outcome().winner else "GREEN win"
+        winner = "White win" if not board.outcome().winner else "Black win"
     else:
         winner = "tie"
     print(winner)
-    pyautogui.alert(winner)
+    #pyautogui.alert(winner)
     i=0
     for y in range(0, WINDOW_HEIGHT, blockSize):
         for x in range(0, WINDOW_WIDTH, blockSize):
@@ -97,18 +99,34 @@ def main():
                 else:
                     img = 'images/Chess_'+str(pieces[i])+'lt60.png'
                 auto=pygame.image.load(img)
-                auto=pygame.transform.scale(auto,(50, 50))
-                SCREEN.blit(auto, (x,y))
+                #auto=pygame.transform.scale(auto,(50, 50))
+                SCREEN.blit(auto, (x-5,y-5))
             i+=1
-    show_menu()
+    #data = pygame.image.tostring(surface, 'RGBA')
+    show_winner(winner)
+
+def show_winner(winner):
+    global SCREEN
+    while True:
+        font = pygame.font.Font("college.ttf", 50)
+        text = font.render(winner, True, (255,153,51))
+        text_rect = text.get_rect(center=(WINDOW_WIDTH/2, WINDOW_HEIGHT/2))
+        SCREEN.blit(text, text_rect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                os._exit(0)
+    
+        pygame.display.update()
 
 
 def show_menu():
-    menu = pygame_menu.Menu('Chess', 400, 400,
-                        theme=pygame_menu.themes.THEME_DEFAULT)
+    menu = pygame_menu.Menu('Chess', WINDOW_WIDTH, WINDOW_HEIGHT,
+                        theme=pygame_menu.themes.THEME_GREEN)
     menu.add.button('Play', main)
     menu.add.button('Quit', pygame_menu.events.EXIT)
-
+    
     menu.mainloop(surface)
 
 show_menu()
+#show_winner("black win")
