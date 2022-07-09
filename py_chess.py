@@ -116,16 +116,24 @@ def show_winner(winner):
     font = pygame.font.Font("college.ttf", 35)
     img = pygame.image.load(r'image.jpg')
     while True:
-        txt = font.render('MENU' , True , GREEN)
-        txt_rect = txt.get_rect(center=(WINDOW_WIDTH/1.3, WINDOW_HEIGHT/8))
-        screen.blit(txt, txt_rect)
-
         text = font.render(winner, True, GREEN)
         text_rect = text.get_rect(center=(WINDOW_WIDTH/4, WINDOW_HEIGHT/8))
         SCREEN.blit(text, text_rect)
         SCREEN.blit(img,(0,100))
 
         mouse = pygame.mouse.get_pos()
+        if WINDOW_WIDTH/1.3-40 <= mouse[0] <= WINDOW_WIDTH/1.3+40 and WINDOW_HEIGHT/8-10 <= mouse[1] <= WINDOW_HEIGHT/8+10:
+            pygame.draw.rect(screen,WHITE,[WINDOW_WIDTH/1.55,WINDOW_HEIGHT/12.7,97,40])
+            txt = font.render('MENU' , True , GREEN)
+            txt_rect = txt.get_rect(center=(WINDOW_WIDTH/1.3, WINDOW_HEIGHT/8))
+            screen.blit(txt, txt_rect)
+        else:
+            pygame.draw.rect(screen,(0,0,0),[WINDOW_WIDTH/1.55,WINDOW_HEIGHT/12.7,97,40])
+            txt = font.render('MENU' , True , GREEN)
+            txt_rect = txt.get_rect(center=(WINDOW_WIDTH/1.3, WINDOW_HEIGHT/8))
+            screen.blit(txt, txt_rect)
+      
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -139,3 +147,4 @@ def show_winner(winner):
         pygame.display.update()
 
 show_menu()
+#show_winner('sd')
