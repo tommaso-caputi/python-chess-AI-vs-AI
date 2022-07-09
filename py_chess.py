@@ -3,8 +3,6 @@ import chess
 import chess.engine
 import os
 import pygame
-import pyautogui
-import time
 
 GREEN = (118,150,86)
 WHITE = (220, 220, 220)
@@ -21,7 +19,7 @@ pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 def main():
     global SCREEN, CLOCK
     pygame.init()
-
+    
     engine = chess.engine.SimpleEngine.popen_uci(r"D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
     board = chess.Board()
     while not board.is_game_over():
@@ -69,7 +67,6 @@ def main():
                     else:
                         img = 'images/Chess_'+str(pieces[i])+'lt60.png'
                     auto=pygame.image.load(img)
-                    #auto=pygame.transform.scale(auto,(50, 50))
                     SCREEN.blit(auto, (x-5,y-5))
                 i+=1
         
@@ -88,7 +85,6 @@ def main():
     else:
         winner = "tie"
     print(winner)
-    #pyautogui.alert(winner)
     i=0
     for y in range(0, WINDOW_HEIGHT, blockSize):
         for x in range(0, WINDOW_WIDTH, blockSize):
@@ -99,28 +95,14 @@ def main():
                 else:
                     img = 'images/Chess_'+str(pieces[i])+'lt60.png'
                 auto=pygame.image.load(img)
-                #auto=pygame.transform.scale(auto,(50, 50))
                 SCREEN.blit(auto, (x-5,y-5))
             i+=1
-    #data = pygame.image.tostring(surface, 'RGBA')
+    pygame.image.save(surface, "image.jpg")
     show_winner(winner)
-
-def show_winner(winner):
-    global SCREEN
-    while True:
-        font = pygame.font.Font("college.ttf", 50)
-        text = font.render(winner, True, (255,153,51))
-        text_rect = text.get_rect(center=(WINDOW_WIDTH/2, WINDOW_HEIGHT/2))
-        SCREEN.blit(text, text_rect)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                os._exit(0)
-    
-        pygame.display.update()
 
 
 def show_menu():
+    pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     menu = pygame_menu.Menu('Chess', WINDOW_WIDTH, WINDOW_HEIGHT,
                         theme=pygame_menu.themes.THEME_GREEN)
     menu.add.button('Play', main)
@@ -128,5 +110,32 @@ def show_menu():
     
     menu.mainloop(surface)
 
+
+def show_winner(winner):
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT+100))
+    font = pygame.font.Font("college.ttf", 35)
+    img = pygame.image.load(r'image.jpg')
+    while True:
+        txt = font.render('MENU' , True , GREEN)
+        txt_rect = txt.get_rect(center=(WINDOW_WIDTH/1.3, WINDOW_HEIGHT/8))
+        screen.blit(txt, txt_rect)
+
+        text = font.render(winner, True, GREEN)
+        text_rect = text.get_rect(center=(WINDOW_WIDTH/4, WINDOW_HEIGHT/8))
+        SCREEN.blit(text, text_rect)
+        SCREEN.blit(img,(0,100))
+
+        mouse = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                os._exit(0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(mouse[0])
+                print(mouse[1])
+                if WINDOW_WIDTH/1.3-40 <= mouse[0] <= WINDOW_WIDTH/1.3+40 and WINDOW_HEIGHT/8-10 <= mouse[1] <= WINDOW_HEIGHT/8+10:
+                    show_menu()
+
+        pygame.display.update()
+
 show_menu()
-#show_winner("black win")
