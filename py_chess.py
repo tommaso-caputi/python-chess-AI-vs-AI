@@ -1,3 +1,4 @@
+from tkinter import S
 import pygame_menu
 import chess
 import chess.engine
@@ -10,17 +11,36 @@ WINDOW_HEIGHT = 400
 WINDOW_WIDTH = 400
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 CLOCK = pygame.time.Clock()
+engine = chess.engine.SimpleEngine.popen_uci("D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
 
 pygame.init()
 surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Chess')
 pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 
+def set_engine(value, _):
+    global engine
+    print(value[0][1])
+    l = ["D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe",
+         "D:\py projects\chess\komodo-13\komodo-13_201fd6\Windows\komodo-13.02-64bit.exe"]
+    engine = chess.engine.SimpleEngine.popen_uci(str(l[int(value[0][1])]))
+
+
+def show_menu():
+    pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+    menu = pygame_menu.Menu('Chess', WINDOW_WIDTH, WINDOW_HEIGHT,
+                        theme=pygame_menu.themes.THEME_GREEN)
+    menu.add.button('Play', main)
+    menu.add.selector('Engine :', [('Stockfish 15', 0), ('Kodomo 13', 1)], onchange=set_engine)
+    menu.add.button('Quit', pygame_menu.events.EXIT)
+
+    menu.mainloop(surface)
+
 def main():
-    global SCREEN, CLOCK
+    global SCREEN, CLOCK, engine
     pygame.init()
     
-    engine = chess.engine.SimpleEngine.popen_uci(r"D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
     board = chess.Board()
     while not board.is_game_over():
         blockSize = 50 
@@ -42,7 +62,7 @@ def main():
 
         result = engine.play(board, chess.engine.Limit(time=0.1))
         board.push(result.move)
-        print(board)
+        #print(board)
     
         pgn = board.epd()
         pieces = [] 
@@ -99,16 +119,6 @@ def main():
             i+=1
     pygame.image.save(surface, "image.jpg")
     show_winner(winner)
-
-
-def show_menu():
-    pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    menu = pygame_menu.Menu('Chess', WINDOW_WIDTH, WINDOW_HEIGHT,
-                        theme=pygame_menu.themes.THEME_GREEN)
-    menu.add.button('Play', main)
-    menu.add.button('Quit', pygame_menu.events.EXIT)
-    
-    menu.mainloop(surface)
 
 
 def show_winner(winner):
