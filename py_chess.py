@@ -5,8 +5,8 @@ import chess.engine
 import os
 import pygame
 
-stockfish_path = ""
-kodomo_path = ""
+stockfish_path = "D:\Projects\Github\python-chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe"
+kodomo_path = "D:\Projects\Github\python-chess\komodo-13\komodo-13_201fd6\Windows\komodo-13.02-64bit.exe"
 GREEN = (118,150,86)
 WHITE = (220, 220, 220)
 WINDOW_HEIGHT = 400
