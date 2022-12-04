@@ -5,13 +5,15 @@ import chess.engine
 import os
 import pygame
 
+stockfish_path = ""
+kodomo_path = ""
 GREEN = (118,150,86)
 WHITE = (220, 220, 220)
 WINDOW_HEIGHT = 400
 WINDOW_WIDTH = 400
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 CLOCK = pygame.time.Clock()
-engine = chess.engine.SimpleEngine.popen_uci("D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
+engine = chess.engine.SimpleEngine.popen_uci(stockfish_path)
 
 pygame.init()
 surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -21,8 +23,8 @@ pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 def set_engine(value, _):
     global engine
     print(value[0][1])
-    l = ["D:\py projects\chess\stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe",
-         "D:\py projects\chess\komodo-13\komodo-13_201fd6\Windows\komodo-13.02-64bit.exe"]
+    l = [stockfish_path,
+         kodomo_path]
     engine = chess.engine.SimpleEngine.popen_uci(str(l[int(value[0][1])]))
 
 
