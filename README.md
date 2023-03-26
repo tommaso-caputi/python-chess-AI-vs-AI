@@ -1,4 +1,4 @@
-# python-chess
+# python-chess-AI-vs-AI
 AI chess battle in python
 
 ## Requirements
