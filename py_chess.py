@@ -5,10 +5,12 @@ import chess.engine
 import os
 import pygame
 
+#modify-------------------------------------------------------------------
+time_for_move = 0.1
 #stockfish_path = ( "stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
 stockfish_path = ("/opt/homebrew/opt/stockfish/bin/stockfish")
-#kodomo_path = "komodo-13\komodo-13_201fd6\Windows\komodo-13.02-64bit.exe"
 komodo_path = "komodo-14/OSX/komodo-14.1-64-osx"
+#-------------------------------------------------------------------------
 GREEN = (118, 150, 86)
 WHITE = (220, 220, 220)
 WINDOW_HEIGHT = 400
@@ -16,7 +18,6 @@ WINDOW_WIDTH = 400
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 CLOCK = pygame.time.Clock()
 engine = chess.engine.SimpleEngine.popen_uci(stockfish_path)
-time_for_move = 0.1
 
 pygame.init()
 surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
