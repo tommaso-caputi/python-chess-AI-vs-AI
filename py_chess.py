@@ -46,7 +46,7 @@ def show_menu():
         "Engine :", [("Stockfish 15", 0), ("Komodo 13", 1)], onchange=set_engine
     )
     menu.add.selector(
-        "Time for move: ",[("0.1",0.1),("1",1)], onchange=set_time_for_move
+        "Max time for move: ",[("0.1",0.1),("0.2",0.2),("0.5",0.5),("1",1)], onchange=set_time_for_move
     )
     menu.add.button("Quit", pygame_menu.events.EXIT)
 
