@@ -31,6 +31,9 @@ def set_engine(value, _):
     l = [stockfish_path, komodo_path]
     engine = chess.engine.SimpleEngine.popen_uci(str(l[int(value[0][1])]))
 
+def set_time_for_move(value, _):
+    global time_for_move
+    time_for_move = value[0][1]
 
 def show_menu():
     pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -41,6 +44,9 @@ def show_menu():
     menu.add.button("Play", main)
     menu.add.selector(
         "Engine :", [("Stockfish 15", 0), ("Komodo 13", 1)], onchange=set_engine
+    )
+    menu.add.selector(
+        "Time for move: ",[("0.1",0.1),("1",1)], onchange=set_time_for_move
     )
     menu.add.button("Quit", pygame_menu.events.EXIT)
 
