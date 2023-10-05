@@ -27,7 +27,6 @@ pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 
 def set_engine(value, _):
     global engine
-    print(value[0][1])
     l = [stockfish_path, komodo_path]
     engine = chess.engine.SimpleEngine.popen_uci(str(l[int(value[0][1])]))
 
@@ -80,7 +79,6 @@ def main():
 
         result = engine.play(board, chess.engine.Limit(time=time_for_move))
         board.push(result.move)
-        # print(board)
 
         pgn = board.epd()
         pieces = []
@@ -114,12 +112,10 @@ def main():
 
         pygame.display.update()
 
-    print(str(board.outcome()))
     if board.outcome().winner != None:
         winner = "White win" if not board.outcome().winner else "Black win"
     else:
         winner = "tie"
-    print(winner)
     i = 0
     for y in range(0, WINDOW_HEIGHT, blockSize):
         for x in range(0, WINDOW_WIDTH, blockSize):
@@ -170,8 +166,6 @@ def show_winner(winner):
                 pygame.quit()
                 os._exit(0)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(mouse[0])
-                print(mouse[1])
                 if (
                     WINDOW_WIDTH / 1.3 - 40 <= mouse[0] <= WINDOW_WIDTH / 1.3 + 40
                     and WINDOW_HEIGHT / 8 - 10 <= mouse[1] <= WINDOW_HEIGHT / 8 + 10
