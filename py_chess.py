@@ -1,14 +1,16 @@
-from tkinter import S
+#from tkinter import S
 import pygame_menu
 import chess
 import chess.engine
 import os
 import pygame
 
-stockfish_path = (
-    "stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe"
-)
-kodomo_path = "komodo-13\komodo-13_201fd6\Windows\komodo-13.02-64bit.exe"
+#modify-------------------------------------------------------------------
+time_for_move = 0.1
+#stockfish_path = ( "stockfish_15_win_x64_avx2\stockfish_15_win_x64_avx2\stockfish_15_x64_avx2.exe")
+stockfish_path = ("/opt/homebrew/opt/stockfish/bin/stockfish")
+komodo_path = "komodo-14/OSX/komodo-14.1-64-osx"
+#-------------------------------------------------------------------------
 GREEN = (118, 150, 86)
 WHITE = (220, 220, 220)
 WINDOW_HEIGHT = 400
@@ -25,10 +27,12 @@ pygame.display.set_icon(pygame.image.load("images/chess-board.png"))
 
 def set_engine(value, _):
     global engine
-    print(value[0][1])
-    l = [stockfish_path, kodomo_path]
+    l = [stockfish_path, komodo_path]
     engine = chess.engine.SimpleEngine.popen_uci(str(l[int(value[0][1])]))
 
+def set_time_for_move(value, _):
+    global time_for_move
+    time_for_move = value[0][1]
 
 def show_menu():
     pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -38,7 +42,10 @@ def show_menu():
     )
     menu.add.button("Play", main)
     menu.add.selector(
-        "Engine :", [("Stockfish 15", 0), ("Kodomo 13", 1)], onchange=set_engine
+        "Engine :", [("Stockfish 15", 0), ("Komodo 13", 1)], onchange=set_engine
+    )
+    menu.add.selector(
+        "Max time for move: ",[("0.1",0.1),("0.2",0.2),("0.5",0.5),("1",1)], onchange=set_time_for_move
     )
     menu.add.button("Quit", pygame_menu.events.EXIT)
 
@@ -70,9 +77,8 @@ def main():
                 j += 1
             i += 1
 
-        result = engine.play(board, chess.engine.Limit(time=0.1))
+        result = engine.play(board, chess.engine.Limit(time=time_for_move))
         board.push(result.move)
-        # print(board)
 
         pgn = board.epd()
         pieces = []
@@ -106,12 +112,10 @@ def main():
 
         pygame.display.update()
 
-    print(str(board.outcome()))
     if board.outcome().winner != None:
         winner = "White win" if not board.outcome().winner else "Black win"
     else:
         winner = "tie"
-    print(winner)
     i = 0
     for y in range(0, WINDOW_HEIGHT, blockSize):
         for x in range(0, WINDOW_WIDTH, blockSize):
@@ -162,8 +166,6 @@ def show_winner(winner):
                 pygame.quit()
                 os._exit(0)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(mouse[0])
-                print(mouse[1])
                 if (
                     WINDOW_WIDTH / 1.3 - 40 <= mouse[0] <= WINDOW_WIDTH / 1.3 + 40
                     and WINDOW_HEIGHT / 8 - 10 <= mouse[1] <= WINDOW_HEIGHT / 8 + 10
